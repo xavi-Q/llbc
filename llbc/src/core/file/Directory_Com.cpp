@@ -609,12 +609,15 @@ LLBC_String LLBC_Directory::DirName(const LLBC_String &path)
 {
 #if LLBC_TARGET_PLATFORM_WIN32
     size_t found = path.rfind('\\');
+    size_t found_t = path.rfind('/');
     if (found == LLBC_String::npos)
     {
-        found = path.rfind('/');
-        if (found == LLBC_String::npos)
+        if (found_t == LLBC_String::npos)
             return LLBC_String();
+        found = found_t;
     }
+    else if (found_t != LLBC_String::npos && found_t > found)
+        found = found_t;
 
     if (path.length() == 3 &&
         (LLBC_String::isalpha(path[0]) &&
@@ -639,12 +642,15 @@ LLBC_String LLBC_Directory::BaseName(const LLBC_String &path)
 {
 #if LLBC_TARGET_PLATFORM_WIN32
     size_t found = path.rfind('\\');
+    size_t found_t = path.rfind('/');
     if (found == LLBC_String::npos)
     {
-        found = path.rfind('/');
-        if (found == LLBC_String::npos)
+        if (found_t == LLBC_String::npos)
             return path;
+        found = found_t;
     }
+    else if (found_t != LLBC_String::npos && found_t > found)
+        found = found_t;
 
     return path.substr(found + 1);
 #else
